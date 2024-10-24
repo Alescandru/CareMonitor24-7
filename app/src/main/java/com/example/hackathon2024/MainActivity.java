@@ -14,6 +14,8 @@ import androidx.room.Room;
 
 import com.example.hackathon2024.database.AppDatabase;
 
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,10 +23,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView pulsTextView, oxigenTextView, tensiuneTextView;
 
     // Inițializare variabile pentru valori simulate
-    private int puls;
-    private int oxigen;
-    private int tensiuneSistolic;
-    private int tensiuneDiastolic;
+    private List<Integer> puls;
+    private List<Integer> oxigen;
+    private List<Integer> tensiuneSistolic;
+    private List<Integer> tensiuneDiastolic;
 
     // Simulator de senzori
     private SensorSimulator simulator;
@@ -54,10 +56,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSensorDataChanged(int pulse, int oxygenLevel, int systolicPressure, int diastolicPressure) {
                 // Actualizează valorile din interfață
-                puls = pulse;
-                oxigen = oxygenLevel;
-                tensiuneSistolic = systolicPressure;
-                tensiuneDiastolic = diastolicPressure;
+                puls.add(pulse);
+                oxigen.add(oxygenLevel);
+                tensiuneSistolic.add(systolicPressure);
+                tensiuneDiastolic.add(diastolicPressure);
 
                 pulsTextView.setText(pulse + " BPM");
                 oxigenTextView.setText(oxygenLevel + "% SpO2");
@@ -84,25 +86,25 @@ public class MainActivity extends AppCompatActivity {
         StringBuilder concluzii = new StringBuilder();
 
         // Analiza pulsului
-        if (puls < 60) {
+        if (lastElement(puls) < 60) {
             concluzii.append("Bradicardie: Pulsul este prea mic.\n");
-        } else if (puls > 100) {
+        } else if (lastElement(puls) > 100) {
             concluzii.append("Tahicardie: Pulsul este prea mare.\n");
         } else {
             concluzii.append("Pulsul este în limite normale.\n");
         }
 
         // Analiza nivelului de oxigen din sânge
-        if (oxigen < 90) {
+        if (lastElement(oxigen) < 90) {
             concluzii.append("Nivel scăzut de oxigen: Hipoxemie.\n");
         } else {
             concluzii.append("Nivelul de oxigen este în limite normale.\n");
         }
 
         // Analiza tensiunii arteriale
-        if (tensiuneSistolic > 140 || tensiuneDiastolic > 90) {
+        if (lastElement(tensiuneSistolic) > 140 || lastElement(tensiuneDiastolic) > 90) {
             concluzii.append("Tensiune arterială ridicată: Hipertensiune.\n");
-        } else if (tensiuneSistolic < 90 || tensiuneDiastolic < 60) {
+        } else if (lastElement(tensiuneSistolic) < 90 || lastElement(tensiuneDiastolic) < 60) {
             concluzii.append("Tensiune arterială scăzută: Hipotensiune.\n");
         } else {
             concluzii.append("Tensiunea arterială este în limite normale.\n");
@@ -110,5 +112,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Afișează concluziile în TextView
         concluziiTextView.setText(concluzii.toString());
+    }
+
+    public static <T> T lastElement(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            return null; // Better be safe
+        }
+        return list.get(list.size() - 1);
     }
 }
