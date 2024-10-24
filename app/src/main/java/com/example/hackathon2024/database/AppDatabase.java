@@ -6,16 +6,20 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {HealthRecord.class}, version = 1, exportSchema = false)
+@Database(entities = {HealthRecord.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract HealthRecordDao healthRecordDao();
 
-    private static AppDatabase instance = null;
+    private static volatile AppDatabase instance = null;
 
     public static AppDatabase getInstance(Context context) {
         if (null == instance) {
-            instance = Room.databaseBuilder(context.getApplicationContext(),
-                    AppDatabase.class, "care_monitor").build();
+            synchronized (AppDatabase.class) {
+                if (null == instance) {
+                    instance = Room.databaseBuilder(context.getApplicationContext(),
+                            AppDatabase.class, "care_monitor").build();
+                }
+            }
         }
         return instance;
     }
