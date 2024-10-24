@@ -85,7 +85,7 @@ public class RaportActivity extends AppCompatActivity {
     }
     private void setupChart() {
         // Obține referința la graficul din layout
-        LineChart lineChart = findViewById(R.id.lineChart);
+        LineChart lineChart = findViewById(R.id.pulsZiChart);
 
         // Crează o listă de puncte pentru grafic
         ArrayList<Entry> entries = new ArrayList<>();
