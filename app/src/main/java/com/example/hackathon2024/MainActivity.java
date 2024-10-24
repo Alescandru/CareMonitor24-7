@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
                 tensiuneSistolic.add(systolicPressure);
                 tensiuneDiastolic.add(diastolicPressure);
 
-                if (puls.size() > 5) {
+                if (puls.size() >= 150) {
                     collectData();
-                    backupData();
+                    //backupData();
                 }
 
                 // Actualizează valorile din interfață
