@@ -1,10 +1,8 @@
 package com.example.hackathon2024;
 
-import static java.lang.Thread.sleep;
+import static com.example.hackathon2024.utils.Utils.lastElement;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +10,9 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import androidx.room.Room;
 
 import com.example.hackathon2024.database.AppDatabase;
 import com.example.hackathon2024.database.DailyReport;
@@ -29,14 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import android.content.pm.PackageManager;
 import android.widget.LinearLayout;
 import android.content.Intent;
 
 
 
 public class MainActivity extends AppCompatActivity {
-    final static int REQUEST_CODE=1232;
     private TextView concluziiTextView;
     private TextView pulsTextView, oxigenTextView, tensiuneTextView;
 
@@ -62,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         db = AppDatabase.getInstance(getApplicationContext());
 
+        BackupScheduler.scheduleBackup(this);
+
         // Ajustează padding-ul pentru layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -86,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
                 tensiuneSistolic.add(systolicPressure);
                 tensiuneDiastolic.add(diastolicPressure);
 
-                if (puls.size() > 5) {
+                if (puls.size() >= 150) {
                     collectData();
-                    backupData();
+                    //backupData();
                 }
 
                 // Actualizează valorile din interfață
@@ -227,13 +222,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Afișează concluziile în TextView
         concluziiTextView.setText(concluzii.toString());
-    }
-
-    public static <T> T lastElement(List<T> list) {
-        if (list == null || list.isEmpty()) {
-            return null; // Better be safe
-        }
-        return list.get(list.size() - 1);
     }
 
     /**

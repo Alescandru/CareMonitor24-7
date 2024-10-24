@@ -25,7 +25,7 @@ public class HealthRecord {
     public int hearBeatMax;
 
     @ColumnInfo(name = "hear_beat_avg")
-    public double hearBeatAvg;
+    public int hearBeatAvg;
 
     @ColumnInfo(name = "oxygen_level_min")
     public int oxygenLevelMin;
@@ -34,7 +34,7 @@ public class HealthRecord {
     public int oxygenLevelMax;
 
     @ColumnInfo(name = "oxygen_level_avg")
-    public double oxygenLevelAvg;
+    public int oxygenLevelAvg;
 
     @ColumnInfo(name = "systolic_pressure_max")
     public int systolicPressureMax;
@@ -43,7 +43,7 @@ public class HealthRecord {
     public int systolicPressureMin;
 
     @ColumnInfo(name = "systolic_pressure_avg")
-    public double systolicPressureAvg;
+    public int systolicPressureAvg;
 
     @ColumnInfo(name = "diastolic_pressure_max")
     public int diastolicPressureMax;
@@ -52,25 +52,25 @@ public class HealthRecord {
     public int diastolicPressureMin;
 
     @ColumnInfo(name = "diastolic_pressure_avg")
-    public double diastolicPressureAvg;
+    public int diastolicPressureAvg;
 
     public static HealthRecord create(List<Integer> heartBeatList, List<Integer> oxygenLevelList, List<Integer> systolicPressureList, List<Integer> diastolicPressureList){
         HealthRecord record = new HealthRecord();
         record.heartBeatMin = Collections.min(heartBeatList);
         record.hearBeatMax = Collections.max(heartBeatList);
-        record.hearBeatAvg = listAverage(heartBeatList);
+        record.hearBeatAvg = (int) listAverage(heartBeatList);
 
         record.oxygenLevelMin = Collections.min(oxygenLevelList);
         record.oxygenLevelMax = Collections.max(oxygenLevelList);
-        record.oxygenLevelAvg = listAverage(oxygenLevelList);
+        record.oxygenLevelAvg = (int) listAverage(oxygenLevelList);
 
         record.systolicPressureMin = Collections.min(systolicPressureList);
         record.systolicPressureMax = Collections.max(systolicPressureList);
-        record.systolicPressureAvg = listAverage(systolicPressureList);
+        record.systolicPressureAvg = (int) listAverage(systolicPressureList);
 
         record.diastolicPressureMin = Collections.min(diastolicPressureList);
         record.diastolicPressureMax = Collections.max(diastolicPressureList);
-        record.diastolicPressureAvg = listAverage(diastolicPressureList);
+        record.diastolicPressureAvg = (int) listAverage(diastolicPressureList);
 
         return record;
     }
