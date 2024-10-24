@@ -4,6 +4,7 @@ import android.os.Handler;
 
 import com.example.hackathon2024.database.AppDatabase;
 
+
 import java.util.Random;
 
 class SensorSimulator {
@@ -14,7 +15,7 @@ class SensorSimulator {
     private int oxygenLevel;
     private int systolicPressure;
     private int diastolicPressure;
-    private boolean isRunning = false;
+    private boolean isRunning = false; // Default value for isRunning
 
     // Data simulation interval
     private final int SIMULATION_INTERVAL = 2000; // 2 secunde
@@ -30,28 +31,55 @@ class SensorSimulator {
     }
 
     public void startSimulation() {
-        isRunning = true;
-        simulateData();
+        simulateData(); // Start simulating data
     }
 
     public void stopSimulation() {
-        isRunning = false;
-        handler.removeCallbacksAndMessages(null);
+        handler.removeCallbacksAndMessages(null); // Stop the handler from calling simulateData
+    }
+
+    // Method to set the isRunning state
+    public void setRunning(boolean running) {
+        this.isRunning = running; // Directly update the isRunning state
+    }
+
+    // Getter for isRunning
+    public boolean isRunning() {
+        return isRunning; // Return the current state of isRunning
     }
 
     private void simulateData() {
-        if (!isRunning) return;
+        // Check if the simulation is running and adjust thresholds accordingly
+        if (isRunning) {
+            // Higher thresholds when isRunning is true
+            pulse = 100 + random.nextInt(51); // between 100 and 150 BPM
+            oxygenLevel = 92 + random.nextInt(9); // between 92% and 100% SpO2
+            systolicPressure = 160 + random.nextInt(41); // between 160 and 200 mmHg
+            diastolicPressure = 80 + random.nextInt(31); // between 80 and 110 mmHg
+        } else {
+            // Normal thresholds when not running
+            pulse = 60 + random.nextInt(40); // between 60 and 100 BPM
+            oxygenLevel = 95 + random.nextInt(5); // between 95% and 100% SpO2
+            systolicPressure = 110 + random.nextInt(20); // between 110 and 130 mmHg
+            diastolicPressure = 70 + random.nextInt(10); // between 70 and 80 mmHg
+        }
 
-        // Generăm date random pentru puls, oxigen și tensiune
-        pulse = 60 + random.nextInt(40); // între 60 și 100 BPM
-        oxygenLevel = 95 + random.nextInt(5); // între 95% și 100% SpO2
-        systolicPressure = 110 + random.nextInt(20); // între 110 și 130 mmHg
-        diastolicPressure = 70 + random.nextInt(10); // între 70 și 80 mmHg
+        // Introduce random health variations (1-10)
+        int randomHealthFactor = random.nextInt(10) + 1; // Random value between 1 and 10
 
-        // Transmitem datele simulate către listener
+        if (randomHealthFactor == 10) {
+            // Apply variations if randomHealthFactor is 10
+            pulse += random.nextInt(11); // Increase pulse by 0 to 10 BPM
+            oxygenLevel -= random.nextInt(5) + 1; // Decrease oxygen level by 1 to 5%
+            systolicPressure += random.nextInt(31) + 10; // Increase systolic pressure by 10 to 40 mmHg
+            diastolicPressure += random.nextInt(10) + 1; // Increase diastolic pressure by 1 to 10 mmHg
+        }
+
+        // Transmit simulated data to listener
         listener.onSensorDataChanged(pulse, oxygenLevel, systolicPressure, diastolicPressure);
 
-        // Repetăm simularea la fiecare 2 secunde
+        // Repeat simulation every 2 seconds
         handler.postDelayed(this::simulateData, SIMULATION_INTERVAL);
     }
+
 }

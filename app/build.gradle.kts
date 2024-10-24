@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.application) 
     id("com.google.devtools.ksp")
 }
 
@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -49,6 +48,10 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
 
+
     // Optional - Room Kotlin Extensions and Coroutines support
     implementation("androidx.room:room-ktx:2.5.0")
+    implementation("androidx.core:core:1.6.0")
+    // Bibloteca pentru charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

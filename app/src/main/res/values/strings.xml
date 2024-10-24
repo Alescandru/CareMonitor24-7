@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Hackathon 2024</string>
+    <string-array name="sex_array">
+        <item>Masculin</item>
+        <item>Feminin</item>
+    </string-array>
 </resources>
