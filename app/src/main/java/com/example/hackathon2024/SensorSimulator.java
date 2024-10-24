@@ -1,6 +1,10 @@
 package com.example.hackathon2024;
 
 import android.os.Handler;
+
+import com.example.hackathon2024.database.AppDatabase;
+
+
 import java.util.Random;
 
 class SensorSimulator {
@@ -13,7 +17,8 @@ class SensorSimulator {
     private int diastolicPressure;
     private boolean isRunning = false; // Default value for isRunning
 
-    private final int SIMULATION_INTERVAL = 2000; // 2 seconds
+    // Data simulation interval
+    private final int SIMULATION_INTERVAL = 2000; // 2 secunde
 
     public interface SensorDataListener {
         void onSensorDataChanged(int pulse, int oxygenLevel, int systolicPressure, int diastolicPressure);
@@ -21,7 +26,7 @@ class SensorSimulator {
 
     private SensorDataListener listener;
 
-    public SensorSimulator(SensorDataListener listener) {
+    public SensorSimulator(SensorDataListener listener, AppDatabase db) {
         this.listener = listener;
     }
 
