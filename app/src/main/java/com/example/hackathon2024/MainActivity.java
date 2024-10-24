@@ -36,7 +36,6 @@ import android.content.Intent;
 
 
 public class MainActivity extends AppCompatActivity {
-    final static int REQUEST_CODE=1232;
     private TextView concluziiTextView;
     private TextView pulsTextView, oxigenTextView, tensiuneTextView;
 
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         fieldInit();
 
         db = AppDatabase.getInstance(getApplicationContext());
+
 
         // Ajustează padding-ul pentru layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

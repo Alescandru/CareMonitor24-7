@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import com.example.hackathon2024.database.AppDatabase;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.Entry;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 public class RaportActivity extends AppCompatActivity {
 
     Button buttonCreatePDF;
-
+    private AppDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,9 @@ public class RaportActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        db = AppDatabase.getInstance(getApplicationContext());
+
         // Adaugă listener pentru a merge la ProfilActivity
         LinearLayout profilLayout = findViewById(R.id.menuLayout).findViewById(R.id.profilLayout);
         profilLayout.setOnClickListener(new View.OnClickListener() {

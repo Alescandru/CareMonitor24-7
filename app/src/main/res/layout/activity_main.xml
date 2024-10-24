@@ -98,15 +98,6 @@
                 android:layout_marginBottom="25dp"
                 android:background="@drawable/border_blue">
 
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="106dp"
-                    android:layout_height="105dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/oxygen_tank" />
-
                 <TextView
                     android:id="@+id/textOxigen"
                     android:layout_width="wrap_content"
@@ -133,6 +124,15 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/textOxigen"
                     app:layout_constraintTop_toBottomOf="@+id/textOxigen" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="107dp"
+                    android:layout_height="106dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/oxygen_tank" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -182,13 +182,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:layout_width="359dp"
-                android:layout_height="111dp"
+                android:layout_width="wrap_content"
+                android:layout_height="251dp"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                     <Button
                         android:id="@+id/buttonAnalizare"
@@ -226,19 +226,23 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Salut aceste este un mic secret.
+                        Va multumim ca ati gazduit acest hackathon"
+                        android:textColor="#F8F8F8"
+                        android:textSize="25dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/concluziiTextView" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Salut aceste este un mic secret.
-                Va multumim ca ati gazduit acest hackathon"
-                android:textSize="25dp"
-                android:textColor="#F8F8F8"/>
 
         </LinearLayout>
     </ScrollView>
