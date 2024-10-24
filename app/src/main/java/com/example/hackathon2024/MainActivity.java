@@ -12,20 +12,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.graphics.Bitmap;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
-import android.util.Log;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
+import android.widget.LinearLayout;
+import android.content.Intent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -95,7 +91,27 @@ public class MainActivity extends AppCompatActivity {
                 createPdf();
             }
         });
-        
+
+        // Adaugă listener pentru profil sa schimba pagina
+        LinearLayout profilLayout = findViewById(R.id.menuLayout).findViewById(R.id.profilLayout);
+        profilLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Deschide activitatea de profil
+                Intent intent = new Intent(MainActivity.this, ProfilActivity.class);
+                startActivity(intent);
+            }
+        });
+        // Adaugă listener pentru rapoarte sa schimba pagina
+        LinearLayout raportLayout = findViewById(R.id.menuLayout).findViewById(R.id.raportLayout);
+        raportLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Deschide activitatea de raport
+                Intent intent = new Intent(MainActivity.this, RaportActivity.class);
+                startActivity(intent);
+            }
+        });
         // Setează listener-ul pentru butonul de analizare
         buttonAnalizare.setOnClickListener(view -> analizaDateMedicale());
     }
