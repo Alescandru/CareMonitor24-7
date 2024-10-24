@@ -31,7 +31,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-
 dependencies {
 
     implementation(libs.appcompat)
@@ -48,4 +47,8 @@ dependencies {
 
     // Optional - Room Kotlin Extensions and Coroutines support
     implementation("androidx.room:room-ktx:2.5.0")
+    implementation("androidx.core:core:1.6.0")
 }
+
+
+
