@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+
             android:padding="16dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,12 +37,12 @@
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/textNumePrenume"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="30dp"
-                    android:text="David Alexnadru-Gabriel"
+                    android:text="Nume Prenume"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -68,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nume"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Prenume"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -217,7 +218,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-
                     android:minHeight="48dp" />
 
                 <Button
@@ -226,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:minHeight="48dp"
-
+                    android:background="@color/white"
                     android:text="Salvează" />
 
             </LinearLayout>
@@ -239,7 +239,7 @@
         android:layout_width="410dp"
         android:layout_height="75dp"
         android:orientation="horizontal"
-
+        android:background="@color/greiM"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

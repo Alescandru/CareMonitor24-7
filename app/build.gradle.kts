@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.application) 
     id("com.google.devtools.ksp")
 }
 
@@ -31,8 +31,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-dependencies {
 
+dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -40,15 +40,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-// Room components
+    // Room components
     implementation("androidx.room:room-runtime:2.5.0")
     ksp("androidx.room:room-compiler:2.5.0")
 
     // Optional - Room Kotlin Extensions and Coroutines support
     implementation("androidx.room:room-ktx:2.5.0")
     implementation("androidx.core:core:1.6.0")
+    // Bibloteca pentru charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
-
-
-

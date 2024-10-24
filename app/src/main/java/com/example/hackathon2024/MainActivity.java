@@ -12,21 +12,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.pdf.PdfDocument;
-import android.os.Environment;
 import android.content.pm.PackageManager;
-import android.widget.Toast;
 import android.widget.LinearLayout;
 import android.content.Intent;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Simulator de senzori
     private SensorSimulator simulator;
-    Button buttonCreatePDF;
     Button buttonIsRunig;
 
     @Override
@@ -83,15 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Pornește simularea la inițializarea aplicației
         simulator.startSimulation();
-        askPermissions();
-
-        buttonCreatePDF = findViewById(R.id.buttonPdf);
-        buttonCreatePDF.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createPdf();
-            }
-        });
 
         // Adaugă listener pentru profil sa schimba pagina
         LinearLayout profilLayout = findViewById(R.id.menuLayout).findViewById(R.id.profilLayout);
@@ -207,64 +185,5 @@ public class MainActivity extends AppCompatActivity {
         // Afișează concluziile în TextView
         concluziiTextView.setText(concluzii.toString());
     }
-    private void askPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-        }
-    }
 
-    public void createPdf() {
-
-        // Dimensiunile pentru pagina A4 în pixeli (la 72 DPI)
-        int pageWidth = 595; // lățimea A4
-        int pageHeight = 842; // înălțimea A4
-
-        PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create();
-        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
-        Canvas canvas = page.getCanvas();
-        Paint paint = new Paint();
-
-        // Setăm dimensiunea textului pentru titlu și dată
-        paint.setTextSize(28);
-        paint.setFakeBoldText(true);
-
-        // Desenăm titlul "RaportMonitor" în centru sus
-        String title = "RaportCareMonitor";
-        float titleX = (pageInfo.getPageWidth() / 2) - (paint.measureText(title) / 2); // Centrarea titlului
-        canvas.drawText(title, titleX, 60, paint);
-
-        // Formatăm data curentă ca "an.luna.zi"
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String currentDate = sdf.format(new Date());
-
-        // Desenăm data în colțul din dreapta sus
-        paint.setTextSize(16); // Setăm o dimensiune mai mică pentru data
-        float dateX = pageInfo.getPageWidth() - paint.measureText(currentDate) - 20; // Aliniere dreapta
-        canvas.drawText(currentDate, dateX, 30, paint);
-
-        pdfDocument.finishPage(page);
-
-        // Nume fișier cu data curentă
-        SimpleDateFormat sdfFileName = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String currentDateAndTime = sdfFileName.format(new Date());
-
-        File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        String fileName = "hope_" + currentDateAndTime + ".pdf";
-        File file = new File(downloadsDir, fileName);
-
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            pdfDocument.writeTo(fos);
-            pdfDocument.close();
-            fos.close();
-            Toast.makeText(this, "PDF created successfully: " + fileName, Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
