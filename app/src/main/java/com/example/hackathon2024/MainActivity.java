@@ -1,5 +1,6 @@
 package com.example.hackathon2024;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.room.Room;
+
+import com.example.hackathon2024.database.AppDatabase;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 oxigenTextView.setText(oxygenLevel + "% SpO2");
                 tensiuneTextView.setText(systolicPressure + "/" + diastolicPressure + " mmHg");
             }
-        });
+        }, AppDatabase.getInstance(this.getApplicationContext()));
 
         // Pornește simularea la inițializarea aplicației
         simulator.startSimulation();
