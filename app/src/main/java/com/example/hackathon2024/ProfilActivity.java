@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -17,12 +20,30 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class ProfilActivity extends AppCompatActivity {
 
-    private EditText editTextName, editTextPrenume, editTextVarsta, editTextGreutate, editTextInaltime;
+    private TextView textNumePrenume; // Declara variabila pentru TextView
+    private static EditText editTextName, editTextPrenume, editTextVarsta, editTextGreutate, editTextInaltime;
     private Spinner spinnerSex;
     private Button buttonSave;
 
     // Numele fișierului pentru SharedPreferences
     private static final String PREFS_NAME = "UserProfilePrefs";
+
+    public static String getName(){
+        return editTextName.getText().toString() + " " + editTextPrenume.getText().toString();
+    }
+
+    public static int getVarsta(){
+        return Integer.parseInt(editTextVarsta.getText().toString());
+    }
+
+    public static double getGreutate(){
+        return Double.parseDouble(editTextGreutate.getText().toString());
+    }
+
+    public static double getInaltime(){
+        return Double.parseDouble(editTextInaltime.getText().toString());
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +52,7 @@ public class ProfilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profil);
 
         // Configurăm view-urile
+        textNumePrenume = findViewById(R.id.textNumePrenume); // Inițializare
         editTextName = findViewById(R.id.editTextName);
         editTextPrenume = findViewById(R.id.editTextPrenume);
         editTextVarsta = findViewById(R.id.editTextVarsta);
@@ -39,9 +61,9 @@ public class ProfilActivity extends AppCompatActivity {
         spinnerSex = findViewById(R.id.spinnerSex);
         buttonSave = findViewById(R.id.buttonSave);
 
-        // Configurăm Spinner pentru sex
+        // Configurăm adapterul pentru Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.sex_array, android.R.layout.simple_spinner_item);
+                R.array.sex_array, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSex.setAdapter(adapter);
 
@@ -89,21 +111,46 @@ public class ProfilActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putString("name", editTextName.getText().toString());
-        editor.putString("prenume", editTextPrenume.getText().toString());
-        editor.putInt("varsta", Integer.parseInt(editTextVarsta.getText().toString()));
-        editor.putFloat("greutate", Float.parseFloat(editTextGreutate.getText().toString()));
-        editor.putFloat("inaltime", Float.parseFloat(editTextInaltime.getText().toString()));
-        editor.putString("sex", spinnerSex.getSelectedItem().toString());
+        // Obține valorile din EditText-uri
+        String name = editTextName.getText().toString();
+        String prenume = editTextPrenume.getText().toString();
 
-        editor.apply();
+        try {
+            int varsta = Integer.parseInt(editTextVarsta.getText().toString());
+            float greutate = Float.parseFloat(editTextGreutate.getText().toString());
+            float inaltime = Float.parseFloat(editTextInaltime.getText().toString());
+
+            // Salvează valorile în SharedPreferences
+            editor.putString("name", name);
+            editor.putString("prenume", prenume);
+            editor.putInt("varsta", varsta);
+            editor.putFloat("greutate", greutate);
+            editor.putFloat("inaltime", inaltime);
+            editor.putString("sex", spinnerSex.getSelectedItem().toString());
+            editor.apply(); // Aplică modificările
+
+            // Actualizează TextView-ul cu noul text
+            textNumePrenume.setText(name + " " + prenume);
+
+            // Afișează un mesaj de succes
+            Toast.makeText(this, "Profil salvat cu succes!", Toast.LENGTH_SHORT).show();
+
+        } catch (NumberFormatException e) {
+            // Afișează un mesaj de eroare dacă intrările nu sunt valide
+            Toast.makeText(this, "Introduceți valori valide pentru vârstă, greutate și înălțime!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadUserProfile() {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        // Obține valorile de nume și prenume din SharedPreferences
+        String name = sharedPreferences.getString("name", "");
+        String prenume = sharedPreferences.getString("prenume", "");
 
-        editTextName.setText(sharedPreferences.getString("name", ""));
-        editTextPrenume.setText(sharedPreferences.getString("prenume", ""));
+        // Setează textul combinat pentru textNumePrenume (TextView)
+        textNumePrenume.setText(name + " " + prenume);
+        editTextName.setText(name);
+        editTextPrenume.setText(prenume);
         editTextVarsta.setText(String.valueOf(sharedPreferences.getInt("varsta", 0)));
         editTextGreutate.setText(String.valueOf(sharedPreferences.getFloat("greutate", 0)));
         editTextInaltime.setText(String.valueOf(sharedPreferences.getFloat("inaltime", 0)));
