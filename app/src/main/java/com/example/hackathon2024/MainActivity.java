@@ -1,10 +1,6 @@
 package com.example.hackathon2024;
 
-import static java.lang.Thread.sleep;
-
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +8,9 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import androidx.room.Room;
 
 import com.example.hackathon2024.database.AppDatabase;
 import com.example.hackathon2024.database.DailyReport;
@@ -29,14 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import android.content.pm.PackageManager;
 import android.widget.LinearLayout;
 import android.content.Intent;
 
 
 
 public class MainActivity extends AppCompatActivity {
-    final static int REQUEST_CODE=1232;
     private TextView concluziiTextView;
     private TextView pulsTextView, oxigenTextView, tensiuneTextView;
 
@@ -61,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         fieldInit();
 
         db = AppDatabase.getInstance(getApplicationContext());
+
+        BackupScheduler.scheduleBackup(this);
 
         // Ajustează padding-ul pentru layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
