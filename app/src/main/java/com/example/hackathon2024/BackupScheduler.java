@@ -19,7 +19,6 @@ public class BackupScheduler {
         long currentTime = System.currentTimeMillis();
 
         // Set the calendar to the beginning of the next day (midnight)
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
