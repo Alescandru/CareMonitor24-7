@@ -46,7 +46,7 @@ class SensorSimulator {
     private void simulateData() {
         // Check if the simulation is running and adjust thresholds accordingly
         if (isRunning) {
-            // Higher thresholds when isRunning is true
+            // Higher thresholds when running
             pulse = 100 + random.nextInt(51); // between 100 and 150 BPM
             oxygenLevel = 92 + random.nextInt(9); // between 92% and 100% SpO2
             systolicPressure = 160 + random.nextInt(41); // between 160 and 200 mmHg
