@@ -54,11 +54,7 @@ class SensorSimulator {
         HealthRecordDao dao = this.db.healthRecordDao();
 
         // TODO: Refactor this in a constructor or smth
-        HealthRecord healthRecord = new HealthRecord();
-        healthRecord.hearBeat = pulse;
-        healthRecord.oxygenLevel = oxygenLevel;
-        healthRecord.systolicPressure = systolicPressure;
-        healthRecord.diastolicPressure = diastolicPressure;
+        HealthRecord healthRecord = new HealthRecord(pulse, oxygenLevel, systolicPressure, diastolicPressure);
 
         new Thread(new Runnable() {
             @Override

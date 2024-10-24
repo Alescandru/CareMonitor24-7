@@ -22,4 +22,11 @@ public class HealthRecord {
 
     @ColumnInfo(name = "diastolic_pressure")
     public int diastolicPressure;
+
+    public HealthRecord(int hearBeat, int oxygenLevel, int systolicPressure, int diastolicPressure){
+        this.hearBeat = hearBeat;
+        this.oxygenLevel = oxygenLevel;
+        this.systolicPressure = systolicPressure;
+        this.diastolicPressure = diastolicPressure;
+    }
 }
