@@ -1,5 +1,7 @@
 package com.example.hackathon2024;
 
+import static com.example.hackathon2024.utils.Utils.lastElement;
+
 import android.os.Bundle;
 
 import android.view.View;
@@ -220,13 +222,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Afișează concluziile în TextView
         concluziiTextView.setText(concluzii.toString());
-    }
-
-    public static <T> T lastElement(List<T> list) {
-        if (list == null || list.isEmpty()) {
-            return null; // Better be safe
-        }
-        return list.get(list.size() - 1);
     }
 
     /**
