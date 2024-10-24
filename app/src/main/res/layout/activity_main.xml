@@ -10,7 +10,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +26,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@drawable/fundal_blue">
 
                 <TextView
                     android:id="@+id/textView4"
@@ -50,6 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="25dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/border_red">
 
                 <TextView
@@ -58,10 +59,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="313dp"
                     android:text="Puls"
                     android:textColor="@color/red"
                     android:textSize="25sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="700 BPM"
+                    android:text="70 BPM"
                     android:textColor="@color/red"
                     android:textSize="25sp"
                     android:textStyle="bold"
@@ -198,9 +201,28 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
 
+                    <Button
+                        android:id="@+id/buttonPdf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:text="Creza pdf"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/concluziiTextView" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Salut aceste este un mic secret.
+                Va multumim ca ati gazduit acest hackathon"
+                android:textSize="25dp"
+                android:textColor="#F8F8F8"/>
 
         </LinearLayout>
     </ScrollView>
@@ -253,6 +275,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/raportLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -278,14 +301,48 @@
                     android:id="@+id/imageView2"
                     android:layout_width="30dp"
                     android:layout_height="29dp"
-                    android:background="@color/blue"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.496"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/traffic" />
+                    app:srcCompat="@drawable/folder_svgrepo" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/profilLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textProfil"
+                    android:layout_width="37dp"
+                    android:layout_height="22dp"
+                    android:layout_weight="1"
+                    android:text="Profil"
+                    android:textColor="@color/lightBlue"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.507"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="30dp"
+                    android:layout_height="29dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.496"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/user" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
     </LinearLayout>
