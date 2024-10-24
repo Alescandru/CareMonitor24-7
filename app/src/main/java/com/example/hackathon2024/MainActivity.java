@@ -1,6 +1,7 @@
 package com.example.hackathon2024;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Simulator de senzori
     private SensorSimulator simulator;
+    Button buttonIsRunig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,20 @@ public class MainActivity extends AppCompatActivity {
 
         // Setează listener-ul pentru butonul de analizare
         buttonAnalizare.setOnClickListener(view -> analizaDateMedicale());
+
+        buttonIsRunig = findViewById(R.id.isRunningB);
+        buttonIsRunig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Toggle the isRunning state
+                boolean newState = !simulator.isRunning(); // Use the getter method
+                simulator.setRunning(newState); // Update the simulator's running state
+
+                // Optionally, update the button text based on the new state
+                buttonIsRunig.setText(newState ? "Running" : "notRunning");
+            }
+        });
+
     }
 
     @Override
@@ -79,32 +95,70 @@ public class MainActivity extends AppCompatActivity {
     private void analizaDateMedicale() {
         StringBuilder concluzii = new StringBuilder();
 
+        // Check if simulation is running and set thresholds accordingly
+        boolean running = simulator.isRunning(); // Get the current running state
+
         // Analiza pulsului
-        if (puls < 60) {
-            concluzii.append("Bradicardie: Pulsul este prea mic.\n");
-        } else if (puls > 100) {
-            concluzii.append("Tahicardie: Pulsul este prea mare.\n");
+        if (running) {
+            // Higher thresholds for running state
+            if (puls < 100) {
+                concluzii.append("Bradicardie: Pulsul este prea mic.\n");
+            } else if (puls > 150) {
+                concluzii.append("Tahicardie: Pulsul este prea mare.\n");
+            } else {
+                concluzii.append("Pulsul este în limite normale.\n");
+            }
         } else {
-            concluzii.append("Pulsul este în limite normale.\n");
+            // Normal thresholds when not running
+            if (puls < 60) {
+                concluzii.append("Bradicardie: Pulsul este prea mic.\n");
+            } else if (puls > 100) {
+                concluzii.append("Tahicardie: Pulsul este prea mare.\n");
+            } else {
+                concluzii.append("Pulsul este în limite normale.\n");
+            }
         }
 
         // Analiza nivelului de oxigen din sânge
-        if (oxigen < 90) {
-            concluzii.append("Nivel scăzut de oxigen: Hipoxemie.\n");
+        if (running) {
+            // Adjusted threshold for oxygen level when running
+            if (oxigen < 92) {
+                concluzii.append("Nivel scăzut de oxigen: Hipoxemie.\n");
+            } else {
+                concluzii.append("Nivelul de oxigen este în limite normale.\n");
+            }
         } else {
-            concluzii.append("Nivelul de oxigen este în limite normale.\n");
+            // Normal threshold for oxygen level
+            if (oxigen < 90) {
+                concluzii.append("Nivel scăzut de oxigen: Hipoxemie.\n");
+            } else {
+                concluzii.append("Nivelul de oxigen este în limite normale.\n");
+            }
         }
 
         // Analiza tensiunii arteriale
-        if (tensiuneSistolic > 140 || tensiuneDiastolic > 90) {
-            concluzii.append("Tensiune arterială ridicată: Hipertensiune.\n");
-        } else if (tensiuneSistolic < 90 || tensiuneDiastolic < 60) {
-            concluzii.append("Tensiune arterială scăzută: Hipotensiune.\n");
+        if (running) {
+            // Higher thresholds for blood pressure when running
+            if (tensiuneSistolic > 200 || tensiuneDiastolic > 110) {
+                concluzii.append("Tensiune arterială ridicată: Hipertensiune.\n");
+            } else if (tensiuneSistolic < 160 || tensiuneDiastolic < 80) {
+                concluzii.append("Tensiune arterială scăzută: Hipotensiune.\n");
+            } else {
+                concluzii.append("Tensiunea arterială este în limite normale.\n");
+            }
         } else {
-            concluzii.append("Tensiunea arterială este în limite normale.\n");
+            // Normal thresholds for blood pressure when not running
+            if (tensiuneSistolic > 140 || tensiuneDiastolic > 90) {
+                concluzii.append("Tensiune arterială ridicată: Hipertensiune.\n");
+            } else if (tensiuneSistolic < 90 || tensiuneDiastolic < 60) {
+                concluzii.append("Tensiune arterială scăzută: Hipotensiune.\n");
+            } else {
+                concluzii.append("Tensiunea arterială este în limite normale.\n");
+            }
         }
 
         // Afișează concluziile în TextView
         concluziiTextView.setText(concluzii.toString());
     }
+
 }
