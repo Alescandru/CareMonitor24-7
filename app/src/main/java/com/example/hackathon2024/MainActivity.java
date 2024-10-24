@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -167,18 +168,18 @@ public class MainActivity extends AppCompatActivity {
 
         if (running) {
             // Higher thresholds for running state
-            if (puls < 100) {
+            if (lastElement(puls) < 100) {
                 concluzii.append("Bradicardie: Pulsul este prea mic.\n");
-            } else if (puls > 150) {
+            } else if (lastElement(puls) > 150) {
                 concluzii.append("Tahicardie: Pulsul este prea mare.\n");
             } else {
                 concluzii.append("Pulsul este în limite normale.\n");
             }
         } else {
             // Normal thresholds when not running
-            if (puls < 60) {
+            if (lastElement(puls) < 60) {
                 concluzii.append("Bradicardie: Pulsul este prea mic.\n");
-            } else if (puls > 100) {
+            } else if (lastElement(puls) > 100) {
                 concluzii.append("Tahicardie: Pulsul este prea mare.\n");
             } else {
                 concluzii.append("Pulsul este în limite normale.\n");
@@ -189,14 +190,14 @@ public class MainActivity extends AppCompatActivity {
 
         if (running) {
             // Adjusted threshold for oxygen level when running
-            if (oxigen < 92) {
+            if (lastElement(oxigen) < 92) {
                 concluzii.append("Nivel scăzut de oxigen: Hipoxemie.\n");
             } else {
                 concluzii.append("Nivelul de oxigen este în limite normale.\n");
             }
         } else {
             // Normal threshold for oxygen level
-            if (oxigen < 90) {
+            if (lastElement(oxigen) < 90) {
                 concluzii.append("Nivel scăzut de oxigen: Hipoxemie.\n");
             } else {
                 concluzii.append("Nivelul de oxigen este în limite normale.\n");
@@ -206,18 +207,18 @@ public class MainActivity extends AppCompatActivity {
         // Analiza tensiunii arteriale
         if (running) {
             // Higher thresholds for blood pressure when running
-            if (tensiuneSistolic > 200 || tensiuneDiastolic > 110) {
+            if (lastElement(tensiuneSistolic) > 200 || lastElement(tensiuneDiastolic) > 110) {
                 concluzii.append("Tensiune arterială ridicată: Hipertensiune.\n");
-            } else if (tensiuneSistolic < 160 || tensiuneDiastolic < 80) {
+            } else if (lastElement(tensiuneSistolic) < 160 || lastElement(tensiuneDiastolic) < 80) {
                 concluzii.append("Tensiune arterială scăzută: Hipotensiune.\n");
             } else {
                 concluzii.append("Tensiunea arterială este în limite normale.\n");
             }
         } else {
             // Normal thresholds for blood pressure when not running
-            if (tensiuneSistolic > 140 || tensiuneDiastolic > 90) {
+            if (lastElement(tensiuneSistolic) > 140 || lastElement(tensiuneDiastolic) > 90) {
                 concluzii.append("Tensiune arterială ridicată: Hipertensiune.\n");
-            } else if (tensiuneSistolic < 90 || tensiuneDiastolic < 60) {
+            } else if (lastElement(tensiuneSistolic) < 90 || lastElement(tensiuneDiastolic) < 60) {
                 concluzii.append("Tensiune arterială scăzută: Hipotensiune.\n");
             } else {
                 concluzii.append("Tensiunea arterială este în limite normale.\n");
