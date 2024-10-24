@@ -54,11 +54,11 @@ public class HealthRecord {
     @ColumnInfo(name = "diastolic_pressure_avg")
     public double diastolicPressureAvg;
 
-    public static HealthRecord create(List<Integer> hearBeatList, List<Integer> oxygenLevelList, List<Integer> systolicPressureList, List<Integer> diastolicPressureList){
+    public static HealthRecord create(List<Integer> heartBeatList, List<Integer> oxygenLevelList, List<Integer> systolicPressureList, List<Integer> diastolicPressureList){
         HealthRecord record = new HealthRecord();
-        record.heartBeatMin = Collections.min(hearBeatList);
-        record.hearBeatMax = Collections.max(hearBeatList);
-        record.hearBeatAvg = listAverage(hearBeatList);
+        record.heartBeatMin = Collections.min(heartBeatList);
+        record.hearBeatMax = Collections.max(heartBeatList);
+        record.hearBeatAvg = listAverage(heartBeatList);
 
         record.oxygenLevelMin = Collections.min(oxygenLevelList);
         record.oxygenLevelMax = Collections.max(oxygenLevelList);

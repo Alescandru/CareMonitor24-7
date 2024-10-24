@@ -3,8 +3,6 @@ package com.example.hackathon2024;
 import android.os.Handler;
 
 import com.example.hackathon2024.database.AppDatabase;
-import com.example.hackathon2024.database.HealthRecord;
-import com.example.hackathon2024.database.HealthRecordDao;
 
 import java.util.Random;
 
@@ -18,6 +16,7 @@ class SensorSimulator {
     private int diastolicPressure;
     private boolean isRunning = false;
 
+    // Data simulation interval
     private final int SIMULATION_INTERVAL = 2000; // 2 secunde
 
     public interface SensorDataListener {
@@ -25,11 +24,9 @@ class SensorSimulator {
     }
 
     private SensorDataListener listener;
-    private AppDatabase db;
 
     public SensorSimulator(SensorDataListener listener, AppDatabase db) {
         this.listener = listener;
-        this.db = db;
     }
 
     public void startSimulation() {
@@ -50,18 +47,6 @@ class SensorSimulator {
         oxygenLevel = 95 + random.nextInt(5); // între 95% și 100% SpO2
         systolicPressure = 110 + random.nextInt(20); // între 110 și 130 mmHg
         diastolicPressure = 70 + random.nextInt(10); // între 70 și 80 mmHg
-
-        HealthRecordDao dao = this.db.healthRecordDao();
-
-        // TODO: Refactor this in a constructor or smth
-        HealthRecord healthRecord = new HealthRecord(pulse, oxygenLevel, systolicPressure, diastolicPressure);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                dao.insertAll(healthRecord);
-            }
-        }).start();
 
         // Transmitem datele simulate către listener
         listener.onSensorDataChanged(pulse, oxygenLevel, systolicPressure, diastolicPressure);

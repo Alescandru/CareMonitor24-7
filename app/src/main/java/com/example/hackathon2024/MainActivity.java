@@ -1,7 +1,10 @@
 package com.example.hackathon2024;
 
+import static java.lang.Thread.sleep;
+
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -13,8 +16,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.room.Room;
 
 import com.example.hackathon2024.database.AppDatabase;
+import com.example.hackathon2024.database.DailyReport;
+import com.example.hackathon2024.database.DailyReportDao;
+import com.example.hackathon2024.database.HealthRecord;
+import com.example.hackathon2024.database.HealthRecordDao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private List<Integer> tensiuneSistolic;
     private List<Integer> tensiuneDiastolic;
 
+    private AppDatabase db;
+
     // Simulator de senzori
     private SensorSimulator simulator;
 
@@ -36,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        fieldInit();
+
+        db = AppDatabase.getInstance(getApplicationContext());
 
         // Ajustează padding-ul pentru layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -55,12 +70,18 @@ public class MainActivity extends AppCompatActivity {
         simulator = new SensorSimulator(new SensorSimulator.SensorDataListener() {
             @Override
             public void onSensorDataChanged(int pulse, int oxygenLevel, int systolicPressure, int diastolicPressure) {
-                // Actualizează valorile din interfață
+
                 puls.add(pulse);
                 oxigen.add(oxygenLevel);
                 tensiuneSistolic.add(systolicPressure);
                 tensiuneDiastolic.add(diastolicPressure);
 
+                if (puls.size() > 5) {
+                    collectData();
+                    backupData();
+                }
+
+                // Actualizează valorile din interfață
                 pulsTextView.setText(pulse + " BPM");
                 oxigenTextView.setText(oxygenLevel + "% SpO2");
                 tensiuneTextView.setText(systolicPressure + "/" + diastolicPressure + " mmHg");
@@ -77,8 +98,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         // Oprește simularea la distrugerea activității
         simulator.stopSimulation();
+    }
+
+    /**
+     * Initialize class fields
+     */
+    private void fieldInit() {
+        puls = new ArrayList<>();
+        oxigen = new ArrayList<>();
+        tensiuneDiastolic = new ArrayList<>();
+        tensiuneSistolic = new ArrayList<>();
     }
 
     // Funcția care analizează datele medicale
@@ -120,4 +152,56 @@ public class MainActivity extends AppCompatActivity {
         }
         return list.get(list.size() - 1);
     }
+
+    /**
+     * Insert vitals lists (puls, oxigen, tensiuneSistolic, tensiuneDiastolic) into db and clears them
+     */
+    public void collectData() {
+        HealthRecordDao dao = this.db.healthRecordDao();
+
+        // Create copies of the lists to ensure thread safety
+        List<Integer> pulsCopy;
+        List<Integer> oxigenCopy;
+        List<Integer> tensiuneSistolicCopy;
+        List<Integer> tensiuneDiastolicCopy;
+
+        synchronized (this) {
+            // Create copies of the lists
+            pulsCopy = new ArrayList<>(puls);
+            oxigenCopy = new ArrayList<>(oxigen);
+            tensiuneSistolicCopy = new ArrayList<>(tensiuneSistolic);
+            tensiuneDiastolicCopy = new ArrayList<>(tensiuneDiastolic);
+
+            // Clear the original lists
+            puls.clear();
+            oxigen.clear();
+            tensiuneSistolic.clear();
+            tensiuneDiastolic.clear();
+        }
+
+        // Pass the copies to the thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dao.insertAll(HealthRecord.create(pulsCopy, oxigenCopy, tensiuneSistolicCopy, tensiuneDiastolicCopy));
+            }
+        }).start();
+    }
+
+    public void backupData() {
+        DailyReportDao dailyReportDao = this.db.dailyReportDao();
+        HealthRecordDao healthRecordDao = this.db.healthRecordDao();
+
+
+        CompletableFuture.supplyAsync(() -> {
+            // Get data from the first DAO
+            List<HealthRecord> reports = healthRecordDao.getAll();
+            return reports;
+        }).thenAcceptAsync(reports -> {
+            healthRecordDao.clear();
+            dailyReportDao.insert(DailyReport.create(reports));
+
+        });
+    }
+
 }

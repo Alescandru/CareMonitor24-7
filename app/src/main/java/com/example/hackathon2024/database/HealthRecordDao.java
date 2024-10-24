@@ -15,6 +15,9 @@ public interface HealthRecordDao {
     @Delete
     void delete(HealthRecord record);
 
-    @Query("SELECT * from health_records")
+    @Query("SELECT * from daily_raw_data")
     List<HealthRecord> getAll();
+
+    @Query("DELETE FROM daily_raw_data")
+    void clear();
 }
