@@ -34,7 +34,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    app:srcCompat="@drawable/user_circle_svgrepo_com" />
 
                 <TextView
                     android:id="@+id/textNumePrenume"
@@ -261,7 +261,7 @@
                         android:layout_height="41dp"
                         android:layout_marginStart="5dp"
                         android:hint="Doctor Name"
-                        android:inputType="numberDecimal"
+                        android:inputType="text"
                         android:minHeight="48dp"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"

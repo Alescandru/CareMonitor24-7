@@ -50,8 +50,6 @@ import java.util.concurrent.Executors;
 public class RaportActivity extends AppCompatActivity {
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-
     Button buttonCreatePDF;
     private AppDatabase db;
     @Override

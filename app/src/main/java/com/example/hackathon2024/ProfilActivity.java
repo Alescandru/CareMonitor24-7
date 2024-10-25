@@ -21,7 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class ProfilActivity extends AppCompatActivity {
 
     private TextView textNumePrenume;
-    private EditText editTextName, editTextPrenume, editTextVarsta, editTextGreutate, editTextInaltime;
+    private static EditText editTextName, editTextPrenume, editTextVarsta, editTextGreutate, editTextInaltime;
     private EditText editTextDoctorName, editTextDoctorPhone, editTextDoctorEmail; // Campurile pentru medic
     private Spinner spinnerSex;
     private Button buttonSave, saveDoctorButton; // Butonul pentru salvare profil și medic

@@ -236,6 +236,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="389dp"
+                    android:layout_height="123dp"
+                    android:layout_marginTop="32dp"
+                    android:text="Salut aceste este un mic secret.
+                Va multumim ca ati gazduit acest hackathon"
+                    android:textColor="#F8F8F8"
+                    android:textSize="25dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonPdf" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
