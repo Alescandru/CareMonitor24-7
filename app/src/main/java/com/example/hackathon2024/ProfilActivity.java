@@ -20,12 +20,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class ProfilActivity extends AppCompatActivity {
 
-    private TextView textNumePrenume; // Declara variabila pentru TextView
+    private TextView textNumePrenume;
     private EditText editTextName, editTextPrenume, editTextVarsta, editTextGreutate, editTextInaltime;
+    private EditText editTextDoctorName, editTextDoctorPhone, editTextDoctorEmail; // Campurile pentru medic
     private Spinner spinnerSex;
-    private Button buttonSave;
+    private Button buttonSave, saveDoctorButton; // Butonul pentru salvare profil și medic
 
-    // Numele fișierului pentru SharedPreferences
     private static final String PREFS_NAME = "UserProfilePrefs";
 
     @Override
@@ -34,15 +34,19 @@ public class ProfilActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profil);
 
-        // Configurăm view-urile
-        textNumePrenume = findViewById(R.id.textNumePrenume); // Inițializare
+        // Inițializare view-uri
+        textNumePrenume = findViewById(R.id.textNumePrenume);
         editTextName = findViewById(R.id.editTextName);
         editTextPrenume = findViewById(R.id.editTextPrenume);
         editTextVarsta = findViewById(R.id.editTextVarsta);
         editTextGreutate = findViewById(R.id.editTextGreutate);
         editTextInaltime = findViewById(R.id.editTextInaltime);
+        editTextDoctorName = findViewById(R.id.editTextDoctorName); // Inițializare campuri pentru medic
+        editTextDoctorPhone = findViewById(R.id.editTextDoctorPhone);
+        editTextDoctorEmail = findViewById(R.id.editTextDoctorEmail);
         spinnerSex = findViewById(R.id.spinnerSex);
         buttonSave = findViewById(R.id.buttonSave);
+        saveDoctorButton = findViewById(R.id.saveDoctorButton); // Inițializare buton de salvare a datelor medicului
 
         // Configurăm adapterul pentru Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -53,7 +57,10 @@ public class ProfilActivity extends AppCompatActivity {
         // Încărcăm datele utilizatorului
         loadUserProfile();
 
-        // Salvăm datele la apăsarea butonului
+        // Încărcăm datele medicului
+        loadDoctorProfile();
+
+        // Salvăm datele utilizatorului la apăsarea butonului
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +68,15 @@ public class ProfilActivity extends AppCompatActivity {
             }
         });
 
-        // Setează padding pentru aspectul Edge to Edge
+        // Salvăm datele medicului la apăsarea butonului
+        saveDoctorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveDoctorProfile();
+            }
+        });
+
+        // Configurare pentru Edge to Edge
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -90,6 +105,43 @@ public class ProfilActivity extends AppCompatActivity {
         });
     }
 
+    // Funcție pentru salvarea detaliilor medicului
+    private void saveDoctorProfile() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Obține valorile din EditText-uri pentru medic
+        String doctorName = editTextDoctorName.getText().toString();
+        String doctorPhone = editTextDoctorPhone.getText().toString();
+        String doctorEmail = editTextDoctorEmail.getText().toString();
+
+        // Salvează datele medicului în SharedPreferences
+        editor.putString("doctor_name", doctorName);
+        editor.putString("doctor_phone", doctorPhone);
+        editor.putString("doctor_email", doctorEmail);
+
+        editor.apply(); // Aplică modificările
+
+        // Afișează un mesaj de succes
+        Toast.makeText(this, "Datele medicului au fost salvate cu succes!", Toast.LENGTH_SHORT).show();
+    }
+
+    // Funcție pentru încărcarea detaliilor medicului
+    private void loadDoctorProfile() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        // Obține valorile medicului din SharedPreferences
+        String doctorName = sharedPreferences.getString("doctor_name", "");
+        String doctorPhone = sharedPreferences.getString("doctor_phone", "");
+        String doctorEmail = sharedPreferences.getString("doctor_email", "");
+
+        // Setează valorile în EditText-urile corespunzătoare
+        editTextDoctorName.setText(doctorName);
+        editTextDoctorPhone.setText(doctorPhone);
+        editTextDoctorEmail.setText(doctorEmail);
+    }
+
+    // Funcție pentru salvarea datelor utilizatorului (nume, prenume, etc.)
     private void saveUserProfile() {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -110,6 +162,7 @@ public class ProfilActivity extends AppCompatActivity {
             editor.putFloat("greutate", greutate);
             editor.putFloat("inaltime", inaltime);
             editor.putString("sex", spinnerSex.getSelectedItem().toString());
+
             editor.apply(); // Aplică modificările
 
             // Actualizează TextView-ul cu noul text
@@ -124,6 +177,7 @@ public class ProfilActivity extends AppCompatActivity {
         }
     }
 
+    // Funcție pentru încărcarea datelor utilizatorului
     private void loadUserProfile() {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         // Obține valorile de nume și prenume din SharedPreferences
