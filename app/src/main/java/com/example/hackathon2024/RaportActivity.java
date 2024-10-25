@@ -21,24 +21,34 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-
-import android.graphics.Color;
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
+import java.util.Date;
+import com.example.hackathon2024.database.AppDatabase;
+import com.example.hackathon2024.database.DailyReport;
+import com.example.hackathon2024.database.DailyReportDao;
+import com.example.hackathon2024.database.HealthRecord;
+import com.example.hackathon2024.database.HealthRecordDao;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+
+
+import java.util.List;
 
 
 public class RaportActivity extends AppCompatActivity {
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     Button buttonCreatePDF;
-
+    private AppDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +59,34 @@ public class RaportActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        db = AppDatabase.getInstance(getApplicationContext());
+        executorService.execute(() -> {
+            HealthRecordDao dao = db.healthRecordDao();
+            List<HealthRecord> listDayData = dao.getAll();
+            setupChart(listDayData);
+            runOnUiThread(() -> {
+                if (listDayData.isEmpty()) {
+                    Toast.makeText(RaportActivity.this, "Nu sunt date pentru a genera graficul.", Toast.LENGTH_SHORT).show();
+                } else {
+                    setupChart(listDayData); // Configurează graficul
+                }
+            });
+        });
+
+        executorService.execute(() -> {
+            DailyReportDao dao = db.dailyReportDao();
+            List<DailyReport> listMonthData = dao.getAll();
+            setupChartMonth(listMonthData);
+            runOnUiThread(() -> {
+                if (listMonthData.isEmpty()) {
+                    Toast.makeText(RaportActivity.this, "Nu sunt date pentru a genera graficul.", Toast.LENGTH_SHORT).show();
+                } else {
+                    setupChartMonth(listMonthData); // Configurează graficul
+                }
+            });
+        });
+
         // Adaugă listener pentru a merge la ProfilActivity
         LinearLayout profilLayout = findViewById(R.id.menuLayout).findViewById(R.id.profilLayout);
         profilLayout.setOnClickListener(new View.OnClickListener() {
@@ -77,36 +115,238 @@ public class RaportActivity extends AppCompatActivity {
                 createPdf();
             }
         });
-        setupChart();
     }
-    private void setupChart() {
-        // Obține referința la graficul din layout
-        LineChart lineChart = findViewById(R.id.lineChart);
 
-        // Crează o listă de puncte pentru grafic
-        ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(1f, 100f));
-        entries.add(new Entry(2f, 200f));
-        entries.add(new Entry(3f, 50f));
-        entries.add(new Entry(4f, 300f));
+    private void setupChart(List<HealthRecord> list) {
+        // Obține referința la graficul de tip bară pentru puls din layout
+        BarChart pulsChart = findViewById(R.id.pulsZiChart);
 
-        // Creează un set de date pentru grafic
-        LineDataSet dataSet = new LineDataSet(entries, "Exemplu de date");
-        dataSet.setColor(getResources().getColor(R.color.red));
-        dataSet.setValueTextColor(getResources().getColor(R.color.blue));
+        // Creează o listă de Entry-uri pentru graficul de puls
+        ArrayList<BarEntry> pulsEntries = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            pulsEntries.add(new BarEntry(i + 1, (float) list.get(i).hearBeatAvg)); // i + 1 pentru a începe de la 1
+        }
 
-        // Configurează datele graficului
-        LineData lineData = new LineData(dataSet);
-        lineChart.setData(lineData);
+        // Creează un set de date pentru graficul de puls
+        BarDataSet pulsDataSet = new BarDataSet(pulsEntries, "Puls mediu");
+        pulsDataSet.setColor(getResources().getColor(R.color.red));
+        pulsDataSet.setValueTextColor(getResources().getColor(R.color.blue));
 
-        // Opțional: configurare grafic (titlu, descriere, etc.)
-        Description description = new Description();
-        description.setText("Grafic de test");
-        lineChart.setDescription(description);
+        // Configurează datele pentru graficul de puls
+        BarData pulsBarData = new BarData(pulsDataSet);
+        pulsChart.setData(pulsBarData);
 
-        // Reîmprospătează graficul
-        lineChart.invalidate();
+        // Configurează axa X pentru graficul de puls
+        XAxis pulsXAxis = pulsChart.getXAxis();
+        pulsXAxis.setGranularity(1f);
+        pulsXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        pulsXAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"1", "2", "3", "4", "5", "6"})); // Exemplu pentru ore
+
+        // Configurează axa Y pentru graficul de puls
+        YAxis pulsLeftAxis = pulsChart.getAxisLeft();
+        pulsLeftAxis.setAxisMinimum(0f);
+        pulsLeftAxis.setAxisMaximum(400f);
+
+        pulsChart.getAxisRight().setEnabled(false);
+        Description pulsDescription = new Description();
+        pulsDescription.setText("Grafic de puls zilnic");
+        pulsChart.setDescription(pulsDescription);
+        pulsChart.invalidate(); // Reîmprospătează graficul
+
+        // Obține referința la graficul de tip bară pentru tensiune
+        BarChart tensiuneChart = findViewById(R.id.tensiuneZiChart); // Asigură-te că ai un BarChart cu acest ID în XML
+
+        // Creează o listă de Entry-uri pentru graficul de tensiune
+        ArrayList<BarEntry> tensiuneSistolicaEntries = new ArrayList<>();
+        ArrayList<BarEntry> tensiuneDiastolicaEntries = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            tensiuneSistolicaEntries.add(new BarEntry(i + 1, (float) list.get(i).systolicPressureAvg)); // Tensiune sistolică
+            tensiuneDiastolicaEntries.add(new BarEntry(i + 1, (float) list.get(i).diastolicPressureAvg)); // Tensiune diastolică
+        }
+
+// Creează seturi de date pentru graficul de tensiune
+        BarDataSet tensiuneSistolicaDataSet = new BarDataSet(tensiuneSistolicaEntries, "Tensiune sistolică medie");
+        tensiuneSistolicaDataSet.setColor(getResources().getColor(R.color.lightBlue));
+        tensiuneSistolicaDataSet.setValueTextColor(getResources().getColor(R.color.blue));
+
+        BarDataSet tensiuneDiastolicaDataSet = new BarDataSet(tensiuneDiastolicaEntries, "Tensiune diastolică medie");
+        tensiuneDiastolicaDataSet.setColor(getResources().getColor(R.color.green)); // Poți schimba culoarea după preferință
+        tensiuneDiastolicaDataSet.setValueTextColor(getResources().getColor(R.color.blue));
+
+// Configurează datele pentru graficul de tensiune
+        BarData tensiuneBarData = new BarData(tensiuneSistolicaDataSet, tensiuneDiastolicaDataSet);
+        tensiuneChart.setData(tensiuneBarData);
+
+// Configurează axa X pentru graficul de tensiune
+        XAxis tensiuneXAxis = tensiuneChart.getXAxis();
+        tensiuneXAxis.setGranularity(1f);
+        tensiuneXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        tensiuneXAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"1", "2", "3", "4", "5", "6"})); // Exemplu pentru ore
+
+// Configurează axa Y pentru graficul de tensiune
+        YAxis tensiuneLeftAxis = tensiuneChart.getAxisLeft();
+        tensiuneLeftAxis.setAxisMinimum(0f);
+        tensiuneLeftAxis.setAxisMaximum(200f); // Ajustează după cum este necesar
+
+        tensiuneChart.getAxisRight().setEnabled(false);
+        Description tensiuneDescription = new Description();
+        tensiuneDescription.setText("Grafic de tensiune zilnic");
+        tensiuneChart.setDescription(tensiuneDescription);
+        tensiuneChart.invalidate(); // Reîmprospătează graficul
+
+
+        // Obține referința la graficul de tip bară pentru oxigen
+        BarChart oxigenChart = findViewById(R.id.oxigenZiChart); // Asigură-te că ai un BarChart cu acest ID în XML
+
+        // Creează o listă de Entry-uri pentru graficul de oxigen
+        ArrayList<BarEntry> oxigenEntries = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            oxigenEntries.add(new BarEntry(i + 1, (float) list.get(i).oxygenLevelAvg)); // i + 1 pentru a începe de la 1
+        }
+
+        // Creează un set de date pentru graficul de oxigen
+        BarDataSet oxigenDataSet = new BarDataSet(oxigenEntries, "Oxigen mediu");
+        oxigenDataSet.setColor(getResources().getColor(R.color.blue));
+        oxigenDataSet.setValueTextColor(getResources().getColor(R.color.lightBlue));
+
+        // Configurează datele pentru graficul de oxigen
+        BarData oxigenBarData = new BarData(oxigenDataSet);
+        oxigenChart.setData(oxigenBarData);
+
+        // Configurează axa X pentru graficul de oxigen
+        XAxis oxigenXAxis = oxigenChart.getXAxis();
+        oxigenXAxis.setGranularity(1f);
+        oxigenXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        oxigenXAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"1", "2", "3", "4", "5", "6"})); // Exemplu pentru ore
+
+        // Configurează axa Y pentru graficul de oxigen
+        YAxis oxigenLeftAxis = oxigenChart.getAxisLeft();
+        oxigenLeftAxis.setAxisMinimum(0f);
+        oxigenLeftAxis.setAxisMaximum(100f); // Ajustează după cum este necesar
+
+        oxigenChart.getAxisRight().setEnabled(false);
+        Description oxigenDescription = new Description();
+        oxigenDescription.setText("Grafic de oxigen zilnic");
+        oxigenChart.setDescription(oxigenDescription);
+        oxigenChart.invalidate(); // Reîmprospătează graficu
+
     }
+
+    private void setupChartMonth(List<DailyReport> list) {
+        // Obține referința la graficul de tip bară pentru puls din layout
+        BarChart pulsChart = findViewById(R.id.pulsLunaChart);
+
+        // Creează o listă de Entry-uri pentru graficul de puls
+        ArrayList<BarEntry> pulsEntries = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            pulsEntries.add(new BarEntry(i + 1, (float) list.get(i).hearBeatAvg)); // i + 1 pentru a începe de la 1
+        }
+
+        // Creează un set de date pentru graficul de puls
+        BarDataSet pulsDataSet = new BarDataSet(pulsEntries, "Puls mediu");
+        pulsDataSet.setColor(getResources().getColor(R.color.red));
+        pulsDataSet.setValueTextColor(getResources().getColor(R.color.blue));
+
+        // Configurează datele pentru graficul de puls
+        BarData pulsBarData = new BarData(pulsDataSet);
+        pulsChart.setData(pulsBarData);
+
+        // Configurează axa X pentru graficul de puls
+        XAxis pulsXAxis = pulsChart.getXAxis();
+        pulsXAxis.setGranularity(1f);
+        pulsXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        pulsXAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"1", "2", "3", "4", "5", "6"})); // Exemplu pentru ore
+
+        // Configurează axa Y pentru graficul de puls
+        YAxis pulsLeftAxis = pulsChart.getAxisLeft();
+        pulsLeftAxis.setAxisMinimum(0f);
+        pulsLeftAxis.setAxisMaximum(400f);
+
+        pulsChart.getAxisRight().setEnabled(false);
+        Description pulsDescription = new Description();
+        pulsDescription.setText("Grafic de puls zilnic");
+        pulsChart.setDescription(pulsDescription);
+        pulsChart.invalidate(); // Reîmprospătează graficul
+
+        // Obține referința la graficul de tip bară pentru tensiune
+        BarChart tensiuneChart = findViewById(R.id.tensiuneLunaChart); // Asigură-te că ai un BarChart cu acest ID în XML
+
+        // Creează o listă de Entry-uri pentru graficul de tensiune
+        ArrayList<BarEntry> tensiuneSistolicaEntries = new ArrayList<>();
+        ArrayList<BarEntry> tensiuneDiastolicaEntries = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            tensiuneSistolicaEntries.add(new BarEntry(i + 1, (float) list.get(i).systolicPressureAvg)); // Tensiune sistolică
+            tensiuneDiastolicaEntries.add(new BarEntry(i + 1, (float) list.get(i).diastolicPressureAvg)); // Tensiune diastolică
+        }
+
+// Creează seturi de date pentru graficul de tensiune
+        BarDataSet tensiuneSistolicaDataSet = new BarDataSet(tensiuneSistolicaEntries, "Tensiune sistolică medie");
+        tensiuneSistolicaDataSet.setColor(getResources().getColor(R.color.lightBlue));
+        tensiuneSistolicaDataSet.setValueTextColor(getResources().getColor(R.color.blue));
+
+        BarDataSet tensiuneDiastolicaDataSet = new BarDataSet(tensiuneDiastolicaEntries, "Tensiune diastolică medie");
+        tensiuneDiastolicaDataSet.setColor(getResources().getColor(R.color.green)); // Poți schimba culoarea după preferință
+        tensiuneDiastolicaDataSet.setValueTextColor(getResources().getColor(R.color.blue));
+
+// Configurează datele pentru graficul de tensiune
+        BarData tensiuneBarData = new BarData(tensiuneSistolicaDataSet, tensiuneDiastolicaDataSet);
+        tensiuneChart.setData(tensiuneBarData);
+
+// Configurează axa X pentru graficul de tensiune
+        XAxis tensiuneXAxis = tensiuneChart.getXAxis();
+        tensiuneXAxis.setGranularity(1f);
+        tensiuneXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        tensiuneXAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"1", "2", "3", "4", "5", "6"})); // Exemplu pentru ore
+
+// Configurează axa Y pentru graficul de tensiune
+        YAxis tensiuneLeftAxis = tensiuneChart.getAxisLeft();
+        tensiuneLeftAxis.setAxisMinimum(0f);
+        tensiuneLeftAxis.setAxisMaximum(200f); // Ajustează după cum este necesar
+
+        tensiuneChart.getAxisRight().setEnabled(false);
+        Description tensiuneDescription = new Description();
+        tensiuneDescription.setText("Grafic de tensiune zilnic");
+        tensiuneChart.setDescription(tensiuneDescription);
+        tensiuneChart.invalidate(); // Reîmprospătează graficul
+
+
+        // Obține referința la graficul de tip bară pentru oxigen
+        BarChart oxigenChart = findViewById(R.id.oxigenLunaChart); // Asigură-te că ai un BarChart cu acest ID în XML
+
+        // Creează o listă de Entry-uri pentru graficul de oxigen
+        ArrayList<BarEntry> oxigenEntries = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            oxigenEntries.add(new BarEntry(i + 1, (float) list.get(i).oxygenLevelAvg)); // i + 1 pentru a începe de la 1
+        }
+
+        // Creează un set de date pentru graficul de oxigen
+        BarDataSet oxigenDataSet = new BarDataSet(oxigenEntries, "Oxigen mediu");
+        oxigenDataSet.setColor(getResources().getColor(R.color.blue));
+        oxigenDataSet.setValueTextColor(getResources().getColor(R.color.lightBlue));
+
+        // Configurează datele pentru graficul de oxigen
+        BarData oxigenBarData = new BarData(oxigenDataSet);
+        oxigenChart.setData(oxigenBarData);
+
+        // Configurează axa X pentru graficul de oxigen
+        XAxis oxigenXAxis = oxigenChart.getXAxis();
+        oxigenXAxis.setGranularity(1f);
+        oxigenXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        oxigenXAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"1", "2", "3", "4", "5", "6"})); // Exemplu pentru ore
+
+        // Configurează axa Y pentru graficul de oxigen
+        YAxis oxigenLeftAxis = oxigenChart.getAxisLeft();
+        oxigenLeftAxis.setAxisMinimum(0f);
+        oxigenLeftAxis.setAxisMaximum(100f); // Ajustează după cum este necesar
+
+        oxigenChart.getAxisRight().setEnabled(false);
+        Description oxigenDescription = new Description();
+        oxigenDescription.setText("Grafic de oxigen zilnic");
+        oxigenChart.setDescription(oxigenDescription);
+        oxigenChart.invalidate(); // Reîmprospătează graficu
+
+    }
+
 
     public void createPdf() {
 
