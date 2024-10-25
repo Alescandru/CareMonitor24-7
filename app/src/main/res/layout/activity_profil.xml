@@ -231,6 +231,129 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/fundal_blue"
+                android:layout_marginTop="30sp"
+                android:padding="16sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/textViewDoctorName"
+                        android:layout_width="113dp"
+                        android:layout_height="28dp"
+                        android:text="Nume Doctor"
+                        android:textColor="@color/white"
+                        android:textSize="18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/editTextDoctorName"
+                        android:layout_width="230dp"
+                        android:layout_height="41dp"
+                        android:layout_marginStart="5dp"
+                        android:hint="Doctor Name"
+                        android:inputType="numberDecimal"
+                        android:minHeight="48dp"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.666"
+                        app:layout_constraintStart_toEndOf="@+id/textViewDoctorName"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/editTextDoctorPhone"
+                        android:layout_width="230dp"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="5dp"
+                        android:hint="Doctor Phone"
+                        android:inputType="phone"
+                        android:minHeight="48dp"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.3"
+                        app:layout_constraintStart_toEndOf="@+id/textViewDoctorPhone"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/textViewDoctorPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30sp"
+                        android:text="Telefon Doctor"
+                        android:textColor="@color/white"
+                        android:textSize="18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textViewDoctorEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30sp"
+                        android:text="Email Doctor"
+                        android:textColor="@color/white"
+                        android:textSize="18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/editTextDoctorEmail"
+                        android:layout_width="230dp"
+                        android:layout_height="47dp"
+                        android:layout_marginStart="24dp"
+                        android:hint="Doctor Email"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textViewDoctorEmail"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/saveDoctorButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:minHeight="48dp"
+                    android:background="@color/white"
+                    android:text="Salvează" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Salut aceste este un mic secret.
+                Va multumim ca ati gazduit acest hackathon"
+                android:textSize="25dp"
+                android:textColor="#F8F8F8"/>
+
         </LinearLayout>
     </ScrollView>
 

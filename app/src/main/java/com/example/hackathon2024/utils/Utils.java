@@ -8,4 +8,11 @@ public class Utils {
         OptionalDouble average = list.stream().mapToDouble(a -> a).average();
         return average.isPresent() ? average.getAsDouble() : 0;
     }
+
+    public static <T> T lastElement(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            return null; // Better be safe
+        }
+        return list.get(list.size() - 1);
+    }
 }

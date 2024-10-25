@@ -17,28 +17,209 @@
             android:orientation="vertical"
             android:padding="16sp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/textView3"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Grafic" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/lineChart"
-                    android:layout_width="0dp"
-                    android:layout_height="288dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintVertical_bias="0.5"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="390dp"
+                        android:layout_height="match_parent">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/textPulsZiChart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grafic pe zi puls"
+                            android:textColor="@color/red"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toTopOf="@+id/pulsZiChart"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/pulsZiChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="288dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.703" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="390dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="30sp">
+
+                        <TextView
+                            android:id="@+id/textPulsLunaChart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grafic pe luna"
+                            android:textColor="@color/red"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toTopOf="@+id/pulsLunaChart"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/pulsLunaChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="288dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="390dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textOxigenZiChart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grafic Oxigen pe Zi"
+                            android:textColor="@color/red"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toTopOf="@+id/oxigenZiChart"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/oxigenZiChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="288dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.703" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="390dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="30dp">
+
+                        <TextView
+                            android:id="@+id/textOxigenLunaChart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grafic Oxigen pe Lună"
+                            android:textColor="@color/red"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toTopOf="@+id/oxigenLunaChart"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/oxigenLunaChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="288dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="390dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textTensiuneZiChart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grafic Tensiune pe Zi"
+                            android:textColor="@color/red"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toTopOf="@+id/tensiuneZiChart"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/tensiuneZiChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="288dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.703" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="390dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="30dp">
+
+                        <TextView
+                            android:id="@+id/textTensiuneLunaChart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Grafic Tensiune pe Lună"
+                            android:textColor="@color/red"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toTopOf="@+id/tensiuneLunaChart"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/tensiuneLunaChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="288dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,13 +230,12 @@
                     android:id="@+id/buttonPdf"
                     android:layout_width="150sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
                     android:background="@color/greiM"
                     android:text="Creza pdf"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/concluziiTextView" />
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
