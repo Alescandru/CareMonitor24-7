@@ -104,7 +104,7 @@ public class RaportActivity extends AppCompatActivity {
 
     private void setupChart(List<HealthRecord> list) {
         // Obține referința la graficul de tip bară din layout
-        BarChart barChart = findViewById(R.id.pulsLunaChart);
+        BarChart barChart = findViewById(R.id.pulsZiChart);
 
         // Creează o listă de Entry-uri pentru grafic pe baza valorilor medii ale pulsului din lista HealthRecord
         ArrayList<BarEntry> entries = new ArrayList<>();

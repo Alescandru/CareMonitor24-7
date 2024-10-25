@@ -41,7 +41,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
-                        <com.github.mikephil.charting.charts.LineChart
+                        <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/pulsZiChart"
                             android:layout_width="match_parent"
                             android:layout_height="288dp"
@@ -70,7 +70,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
-                        <com.github.mikephil.charting.charts.LineChart
+                        <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/pulsLunaChart"
                             android:layout_width="match_parent"
                             android:layout_height="288dp"
@@ -109,7 +109,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
-                        <com.github.mikephil.charting.charts.LineChart
+                        <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/oxigenZiChart"
                             android:layout_width="match_parent"
                             android:layout_height="288dp"
@@ -137,7 +137,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
-                        <com.github.mikephil.charting.charts.LineChart
+                        <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/oxigenLunaChart"
                             android:layout_width="match_parent"
                             android:layout_height="288dp"
@@ -177,7 +177,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
-                        <com.github.mikephil.charting.charts.LineChart
+                        <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/tensiuneZiChart"
                             android:layout_width="match_parent"
                             android:layout_height="288dp"
@@ -205,7 +205,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
-                        <com.github.mikephil.charting.charts.LineChart
+                        <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/tensiuneLunaChart"
                             android:layout_width="match_parent"
                             android:layout_height="288dp"
