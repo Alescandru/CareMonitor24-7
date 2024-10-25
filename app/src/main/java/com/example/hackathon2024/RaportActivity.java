@@ -21,22 +21,29 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import com.example.hackathon2024.database.AppDatabase;
-import com.github.mikephil.charting.charts.LineChart;
+import com.example.hackathon2024.database.HealthRecord;
+import com.example.hackathon2024.database.HealthRecordDao;
 import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import android.graphics.Color;
-import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
+
+import java.util.List;
 
 
 public class RaportActivity extends AppCompatActivity {
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     Button buttonCreatePDF;
     private AppDatabase db;
@@ -52,6 +59,18 @@ public class RaportActivity extends AppCompatActivity {
         });
 
         db = AppDatabase.getInstance(getApplicationContext());
+        executorService.execute(() -> {
+            HealthRecordDao dao = db.healthRecordDao();
+            List<HealthRecord> listDayData = dao.getAll();
+
+            runOnUiThread(() -> {
+                if (listDayData.isEmpty()) {
+                    Toast.makeText(RaportActivity.this, "Nu sunt date pentru a genera graficul.", Toast.LENGTH_SHORT).show();
+                } else {
+                    setupChart(listDayData); // Configurează graficul
+                }
+            });
+        });
 
         // Adaugă listener pentru a merge la ProfilActivity
         LinearLayout profilLayout = findViewById(R.id.menuLayout).findViewById(R.id.profilLayout);
@@ -81,35 +100,47 @@ public class RaportActivity extends AppCompatActivity {
                 createPdf();
             }
         });
-        setupChart();
     }
-    private void setupChart() {
-        // Obține referința la graficul din layout
-        LineChart lineChart = findViewById(R.id.pulsZiChart);
 
-        // Crează o listă de puncte pentru grafic
-        ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(1f, 100f));
-        entries.add(new Entry(2f, 200f));
-        entries.add(new Entry(3f, 50f));
-        entries.add(new Entry(4f, 300f));
+    private void setupChart(List<HealthRecord> list) {
+        // Obține referința la graficul de tip bară din layout
+        BarChart barChart = findViewById(R.id.pulsLunaChart);
 
-        // Creează un set de date pentru grafic
-        LineDataSet dataSet = new LineDataSet(entries, "Exemplu de date");
+        // Creează o listă de Entry-uri pentru grafic pe baza valorilor medii ale pulsului din lista HealthRecord
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            entries.add(new BarEntry(i + 1, (float) list.get(i).hearBeatAvg)); // i + 1 pentru a începe de la 1
+        }
+
+        // Creează un set de date pentru grafic folosind lista primită ca parametru
+        BarDataSet dataSet = new BarDataSet(entries, "Puls mediu"); // Poți schimba titlul aici
         dataSet.setColor(getResources().getColor(R.color.red));
         dataSet.setValueTextColor(getResources().getColor(R.color.blue));
 
         // Configurează datele graficului
-        LineData lineData = new LineData(dataSet);
-        lineChart.setData(lineData);
+        BarData barData = new BarData(dataSet);
+        barChart.setData(barData);
 
-        // Opțional: configurare grafic (titlu, descriere, etc.)
+        // Configurează axa X pentru a afișa orele (1-24)
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setGranularity(1f); // Pasul să fie de o oră
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Legenda jos
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"1", "2", "3", "4", "5", "6"})); // Exemplu pentru ore
+
+        // Configurează axa Y pentru a afișa valori ale pulsului
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f); // Minim 0 puls
+        leftAxis.setAxisMaximum(400f); // Maxim 400 puls (ajustează în funcție de valori)
+
+        barChart.getAxisRight().setEnabled(false); // Dezactivează axa Y din dreapta
+
+        // Opțional: configurare descriere grafic
         Description description = new Description();
-        description.setText("Grafic de test");
-        lineChart.setDescription(description);
+        description.setText("Grafic de puls zilnic"); // Poți modifica descrierea aici
+        barChart.setDescription(description);
 
         // Reîmprospătează graficul
-        lineChart.invalidate();
+        barChart.invalidate();
     }
 
     public void createPdf() {

@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (puls.size() > 5) {
                     collectData();
-                    backupData();
+                    //backupData();
                 }
 
                 // Actualizează valorile din interfață
